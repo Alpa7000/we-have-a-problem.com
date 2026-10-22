@@ -28,9 +28,9 @@
     td, th { padding: .25rem .5rem; border: 1px solid #ccc; text-align: left; vertical-align: top; }
     th { background: #f5f5f5; font-weight: bold; }
     .patched { width: auto; }
-    details.workaround { margin-top: 1.5rem; }
+    details.workaround { margin-top: 1rem; }
     details.workaround > summary { cursor: pointer; }
-    details.workaround > summary > h3 { display: inline; margin: 0; }
+    details.workaround > summary > h4 { display: inline; margin: 0; }
     details.workaround[open] > summary { margin-bottom: 1rem; }
     h4 { margin-top: 1.5rem; margin-bottom: .5rem; font-size: 1rem; font-weight: bold; }
     pre, code { font-family: Menlo, Consolas, monospace; background-color: #eee; }
@@ -204,8 +204,10 @@ curl https://dv-g3b-aaa-noct-emudhra.we-have-a-problem.com/</pre>
 
 <p>Add more at <a href="https://github.com/galadran/we-have-a-problem.com">github.com/galadran/we-have-a-problem.com</a>.</p>
 
+<h3 id="workarounds"><a href="#workarounds">Are there workarounds until patches are available?</a></h3>
+
 <details class="workaround" id="macos-curl">
-<summary><h3>Are there workarounds for macOS curl, git, and Python?</h3></summary>
+<summary><h4>macOS curl, git, and Python</h4></summary>
 
 <p>macOS blocks the compromised intermediates, but the built-in <code>curl</code>, <code>git</code>, <code>python3</code>, <code>perl</code>, <code>ruby</code>, and <code>openssl</code> verify certificates against <code>/etc/ssl/cert.pem</code> without checking revocation, and that file has not been updated. To remove the affected roots from it, run:</p>
 <pre>sudo cp -p /etc/ssl/cert.pem /etc/ssl/cert.pem.bak &amp;&amp;
@@ -221,7 +223,7 @@ sudo chmod 644 "$F"</pre>
 </details>
 
 <details class="workaround" id="linux">
-<summary><h3>Are there workarounds for Linux?</h3></summary>
+<summary><h4>Linux</h4></summary>
 
 <p>Until a distribution ships an updated <code>ca-certificates</code> package, expert users can distrust the affected roots in the system trust store. This is NOT recommended for ordinary users.</p>
 
@@ -276,7 +278,7 @@ update-ca-trust</pre>
 </details>
 
 <details class="workaround" id="windows">
-<summary><h3>Are there workarounds for Windows?</h3></summary>
+<summary><h4>Windows</h4></summary>
 
 <p>Microsoft has shipped blocks for these certificates through Windows' <a href="https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/certificate-trust#automatic-certificate-trust-list-updates">automatic certificate trust list updates</a>. Machines that receive these updates don't need this workaround. This script lets administrators block the compromised certificates locally on machines that do not, for example those that are offline or have automatic updates disabled.</p>
 
@@ -292,7 +294,7 @@ update-ca-trust</pre>
 </details>
 
 <details class="workaround" id="netbsd">
-<summary><h3>Are there workarounds for NetBSD?</h3></summary>
+<summary><h4>NetBSD</h4></summary>
 
 <p>On NetBSD 10 and later, run as root:</p>
 <pre>certctl untrust /usr/share/certs/mozilla/all/emSign_ECC_Root_CA_-_G3.pem &amp;&amp;
@@ -300,7 +302,7 @@ certctl untrust /usr/share/certs/mozilla/all/Comodo_AAA_Services_root.pem</pre>
 </details>
 
 <details class="workaround" id="freebsd">
-<summary><h3>Are there workarounds for FreeBSD?</h3></summary>
+<summary><h4>FreeBSD</h4></summary>
 
 <p>On FreeBSD 14 or later, run the following commands as root:</p>
 <pre>
