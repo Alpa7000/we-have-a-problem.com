@@ -190,6 +190,12 @@ sudo chmod 644 "$F"</pre>
   -e 's|^mozilla/Comodo_AAA_Services_root.crt|!&amp;|' \
   /etc/ca-certificates.conf &amp;&amp; update-ca-certificates</pre>
 
+<p>If you use the Java certificate store, it might fall out of sync with your system certificate store. To sync the stores, run as root:</p>
+<pre>
+touch /var/lib/ca-certificates-java/fresh
+dpkg-reconfigure ca-certificates-java
+</pre>
+
 <p>On Alpine, run as root:</p>
 <pre>apk add ca-certificates &amp;&amp;
 sed -i -e 's|^mozilla/emSign_ECC_Root_CA_-_G3.crt|!&amp;|' \
