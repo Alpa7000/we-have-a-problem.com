@@ -28,6 +28,10 @@
     td, th { padding: .25rem .5rem; border: 1px solid #ccc; text-align: left; vertical-align: top; }
     th { background: #f5f5f5; font-weight: bold; }
     .patched { width: auto; }
+    details.workaround { margin-top: 1.5rem; }
+    details.workaround > summary { cursor: pointer; }
+    details.workaround > summary > h3 { display: inline; margin: 0; }
+    details.workaround[open] > summary { margin-bottom: 1rem; }
     h4 { margin-top: 1.5rem; margin-bottom: .5rem; font-size: 1rem; font-weight: bold; }
     pre, code { font-family: Menlo, Consolas, monospace; background-color: #eee; }
     pre { padding: .5rem 1rem; font-size: 0.8rem; overflow-x: auto; }
@@ -200,7 +204,8 @@ curl https://dv-g3b-aaa-noct-emudhra.we-have-a-problem.com/</pre>
 
 <p>Add more at <a href="https://github.com/galadran/we-have-a-problem.com">github.com/galadran/we-have-a-problem.com</a>.</p>
 
-<h3 id="macos-curl"><a href="#macos-curl">Are there workarounds for macOS curl, git, and Python?</a></h3>
+<details class="workaround" id="macos-curl">
+<summary><h3>Are there workarounds for macOS curl, git, and Python?</h3></summary>
 
 <p>macOS blocks the compromised intermediates, but the built-in <code>curl</code>, <code>git</code>, <code>python3</code>, <code>perl</code>, <code>ruby</code>, and <code>openssl</code> verify certificates against <code>/etc/ssl/cert.pem</code> without checking revocation, and that file has not been updated. To remove the affected roots from it, run:</p>
 <pre>sudo cp -p /etc/ssl/cert.pem /etc/ssl/cert.pem.bak &amp;&amp;
@@ -212,9 +217,11 @@ sudo awk '/^(###|===) /{skip=0}
 echo 'import os; os.environ.setdefault("PIP_CERT", "/etc/ssl/cert.pem")' | sudo tee -a "$F" &gt; /dev/null &amp;&amp;
 sudo chmod 644 "$F"</pre>
 
-<p>For nix-darwin users, please **additionally** follow NixOS instructions.</p>
+<p>For nix-darwin users, please <strong>additionally</strong> follow NixOS instructions.</p>
+</details>
 
-<h3 id="linux"><a href="#linux">Are there workarounds for Linux?</a></h3>
+<details class="workaround" id="linux">
+<summary><h3>Are there workarounds for Linux?</h3></summary>
 
 <p>Until a distribution ships an updated <code>ca-certificates</code> package, expert users can distrust the affected roots in the system trust store. This is NOT recommended for ordinary users.</p>
 
@@ -266,8 +273,10 @@ update-ca-trust</pre>
   "Comodo AAA Services root"
   "emSign ECC Root CA - G3"
 ];</pre>
+</details>
 
-<h3 id="windows"><a href="#windows">Are there workarounds for Windows?</a></h3>
+<details class="workaround" id="windows">
+<summary><h3>Are there workarounds for Windows?</h3></summary>
 
 <p>Microsoft has shipped blocks for these certificates through Windows' <a href="https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/certificate-trust#automatic-certificate-trust-list-updates">automatic certificate trust list updates</a>. Machines that receive these updates don't need this workaround. This script lets administrators block the compromised certificates locally on machines that do not, for example those that are offline or have automatic updates disabled.</p>
 
@@ -280,14 +289,18 @@ update-ca-trust</pre>
 <p>The script imports its 16 compromised intermediates and cross-signs into <code>LocalMachine\Disallowed</code> (Untrusted Certificates).</p>
 
 <p>This mitigation applies to clients using the Windows operating system certificate trust stores and chain validation (including Schannel TLS and Authenticode). It adds blocks to Untrusted Certificates without modifying Trusted Root Certification Authorities. Applications using independent CA bundles still need their own updates.</p>
+</details>
 
-<h3 id="netbsd"><a href="#netbsd">Are there workarounds for NetBSD?</a></h3>
+<details class="workaround" id="netbsd">
+<summary><h3>Are there workarounds for NetBSD?</h3></summary>
 
 <p>On NetBSD 10 and later, run as root:</p>
 <pre>certctl untrust /usr/share/certs/mozilla/all/emSign_ECC_Root_CA_-_G3.pem &amp;&amp;
 certctl untrust /usr/share/certs/mozilla/all/Comodo_AAA_Services_root.pem</pre>
+</details>
 
-<h3 id="freebsd"><a href="#freebsd">Are there workarounds for FreeBSD?</a></h3>
+<details class="workaround" id="freebsd">
+<summary><h3>Are there workarounds for FreeBSD?</h3></summary>
 
 <p>On FreeBSD 14 or later, run the following commands as root:</p>
 <pre>
@@ -295,6 +308,7 @@ cp /etc/ssl/certs/14bc7599.0 /usr/share/certs/untrusted/14bc7599.pem
 cp /etc/ssl/certs/ee64a828.0 /usr/share/certs/untrusted/ee64a828.pem
 certctl rehash
 </pre>
+</details>
 
 <hr>
 
@@ -419,6 +433,17 @@ const observer = new IntersectionObserver(entries => {
 observer.observe(document.getElementById('results'));
 
 rerun.addEventListener('click', start);
+
+// Workarounds are collapsed by default. Open the one a link points at.
+function openLinkedWorkaround() {
+  const el = document.getElementById(location.hash.slice(1));
+  if (el instanceof HTMLDetailsElement && !el.open) {
+    el.open = true;
+    el.scrollIntoView();
+  }
+}
+openLinkedWorkaround();
+window.addEventListener('hashchange', openLinkedWorkaround);
 </script>
 </body>
 </html>
