@@ -35,6 +35,7 @@
     .good { color: #090; }
     .bad { color: #c00; }
     .pending { color: #999; }
+    abbr[title] { cursor: help; }
     small { color: #808080; }
     button { font: inherit; font-size: .9rem; padding: .2rem .6rem; }
   </style>
@@ -85,7 +86,7 @@ openssl dgst -sha384 -verify EM-DV-TLS-CA-G3B.pub.pem -signature EM-DV-TLS-CA-G3
 curl https://dv-g3b-aaa-emudhra.we-have-a-problem.com/</pre>
 <p>A certificate error means the client does not trust the compromised intermediates.</p>
 
-<p>To check a trust store offline, <a href="chains.zip">chains.zip</a> contains the certificate chain served by each of the twelve hosts above in PEM format, with instructions for verifying them with OpenSSL.</p>
+<p>To check a trust store offline, <a href="chains.zip">chains.zip</a> contains the certificate chain served by each of the fourteen hosts above in PEM format, with instructions for verifying them with OpenSSL.</p>
 
 <h2 id="cause"><a href="#cause">What is known about the cause?</a></h2>
 
@@ -263,7 +264,9 @@ certctl rehash
 <script>
 // Hosts under test. Each intermediate is served twice: first chaining to its
 // emSign root, then via the Sectigo cross-sign chaining to AAA Certificate
-// Services. Each server must respond to GET / with
+// Services. The `noct` hosts serve a leaf that was never logged to Certificate
+// Transparency, so CT-enforcing clients reject them even if they trust the
+// intermediate. Each server must respond to GET / with
 // `Access-Control-Allow-Origin: *`.
 const HOSTS = [
   { host: 'dv-g3b-emudhra.we-have-a-problem.com',     label: 'CN=EM DV TLS CA - G3B, O=eMudhra BV, C=NL', root: 'emSign Root TLS CA - G3' },
@@ -278,7 +281,11 @@ const HOSTS = [
   { host: 'ov-g3c-aaa-emudhra.we-have-a-problem.com', label: 'CN=EM OV TLS CA - G3C, O=eMudhra Inc, C=US', root: 'AAA Certificate Services' },
   { host: 'ev-g3b-aaa-emudhra.we-have-a-problem.com', label: 'CN=EM EV TLS CA - G3B, O=eMudhra BV, C=NL', root: 'AAA Certificate Services' },
   { host: 'ev-g3c-aaa-emudhra.we-have-a-problem.com', label: 'CN=EM EV TLS CA - G3C, O=eMudhra Inc, C=US', root: 'AAA Certificate Services' },
+  { host: 'dv-g3b-noct-emudhra.we-have-a-problem.com',     label: 'CN=EM DV TLS CA - G3B, O=eMudhra BV, C=NL', root: 'emSign Root TLS CA - G3', noct: true },
+  { host: 'dv-g3b-aaa-noct-emudhra.we-have-a-problem.com', label: 'CN=EM DV TLS CA - G3B, O=eMudhra BV, C=NL', root: 'AAA Certificate Services', noct: true },
 ];
+const NOCT_TITLE = 'No Certificate Transparency: this certificate was never logged to CT and has no SCTs. ' +
+  'Clients that enforce CT, such as Chrome, Safari and Firefox, reject it even if they still trust the intermediate.';
 const TIMEOUT_MS = 10000;
 
 const resultsBody = document.querySelector('#results tbody');
@@ -312,12 +319,17 @@ async function probe(host) {
 
 const COOLDOWN_MS = 10000;
 
-const cells = HOSTS.map(({ host, label, root }) => {
+const cells = HOSTS.map(({ host, label, root, noct }) => {
   const tr = document.createElement('tr');
   const tdName = document.createElement('td');
   const a = document.createElement('a');
   a.href = `https://${host}/`; a.rel = 'noopener'; a.target = '_blank'; a.textContent = label;
   tdName.appendChild(a);
+  if (noct) {
+    const abbr = document.createElement('abbr');
+    abbr.title = NOCT_TITLE; abbr.textContent = 'No CT';
+    tdName.append(' (', abbr, ')');
+  }
   const tdResult = cell('not yet checked', 'pending');
   tr.append(tdName, cell(root), tdResult);
   resultsBody.appendChild(tr);
