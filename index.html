@@ -303,7 +303,7 @@ update-ca-trust</pre>
 
 <p><strong>This mitigation is not recommended for enterprise-managed devices.</strong> Your IT department will manage the rollout; contact them before applying local changes.</p>
 
-<p>Download and inspect<pre>Block-EmudhraCompromisedCA.ps1</pre> from the <span class="hint" title="We intentionally don't link the script directly here. Direct download links can trigger false-positive &quot;suspicious link&quot; warnings in Microsoft Teams and similar tools.">GitHub repository linked in the footer</span>, then run it from an elevated PowerShell terminal. Requires PowerShell 5.1 or later and the built-in Windows PKI module. This command bypasses execution policy for this process only; it does not change the machine's policy. Organization-enforced policies may still prevent execution.</p>
+<p>Download and inspect <code>Block-EmudhraCompromisedCA.ps1</code> from the <span class="hint" title="We intentionally don't link the script directly here. Direct download links can trigger false-positive &quot;suspicious link&quot; warnings in Microsoft Teams and similar tools.">GitHub repository linked in the footer</span>, then run it from an elevated PowerShell terminal. Requires PowerShell 5.1 or later and the built-in Windows PKI module. This command bypasses execution policy for this process only; it does not change the machine's policy. Organization-enforced policies may still prevent execution.</p>
 
 <pre>powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Block-EmudhraCompromisedCA.ps1</pre>
 
