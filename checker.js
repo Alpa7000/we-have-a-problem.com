@@ -28,6 +28,11 @@ const HOSTS = [
   { host: 'dv-g3b-noct-emudhra.we-have-a-problem.com',     label: 'CN=EM DV TLS CA - G3B, O=eMudhra BV, C=NL', root: 'emSign Root TLS CA - G3', noct: true },
   { host: 'dv-g3b-aaa-noct-emudhra.we-have-a-problem.com', label: 'CN=EM DV TLS CA - G3B, O=eMudhra BV, C=NL', root: 'AAA Certificate Services', noct: true },
 ];
+// Fetched alongside the hosts above but not shown: an ordinary, publicly
+// trusted certificate on the same servers, so every client reaches it. It
+// gives the statistics a count of the clients that ran the check, patched
+// or not, to set the insecure connections against.
+const PROBE_HOST = 'probe-emudhra.we-have-a-problem.com';
 const TIMEOUT_MS = 10000;
 const COOLDOWN_MS = 10000;
 // Present in every test server's response body. A response without it came
@@ -106,6 +111,8 @@ async function run() {
     td.textContent = S.checking;
     td.className = 'pending';
   }
+  // The result of the probe is not shown; it only needs to be requested.
+  probe(PROBE_HOST).catch(() => {});
   const results = await Promise.all(HOSTS.map(async ({ host }, i) => {
     const r = await probe(host);
     cells[i].textContent = r.text;
