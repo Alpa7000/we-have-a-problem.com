@@ -311,6 +311,21 @@ update-ca-trust</pre>
 <p>This mitigation applies to clients using the Windows operating system certificate trust stores and chain validation (including Schannel TLS and Authenticode). It adds blocks to Untrusted Certificates without modifying Trusted Root Certification Authorities. Applications using independent CA bundles still need their own updates.</p>
 </details>
 
+<details class="workaround" id="android">
+<summary><h4>Android</h4></summary>
+
+<p>Many Android devices have automatically received an update blocking the affected certificates via the Google Play services update channel.</p>
+
+<p>On devices that have not received the updated blocklist, users may be able to disable the affected roots in the system trust store. Open Settings and search for <strong>Trusted credentials</strong>, which is often found under Security, then Encryption &amp; credentials. In the <strong>System</strong> tab, tap each of the following certificates and choose <strong>Disable</strong>:</p>
+<ul>
+<li><strong>emSign ECC Root CA - G3</strong>, listed under eMudhra Technologies Limited</li>
+<li><strong>AAA Certificate Services</strong>, listed under Comodo CA Limited</li>
+</ul>
+<p>The other eMudhra and Comodo certificates in the list are not affected and should be left enabled. Disabling AAA Certificate Services may cause errors on some websites that still chain to it. The roots can be re-enabled from the same screen once the device has received an update.</p>
+
+<p>Some Android devices (e.g. Huawei's HarmonyOS) may not allow users to disable system-installed roots.</p>
+</details>
+
 <details class="workaround" id="netbsd">
 <summary><h4>NetBSD</h4></summary>
 
