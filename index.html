@@ -50,6 +50,7 @@
     .bad { color: #c00; }
     .pending { color: #999; }
     abbr[title] { cursor: help; }
+    .hint[title] { cursor: help; text-decoration: underline dotted; }
     small { color: #808080; }
     button { font: inherit; font-size: .9rem; padding: .2rem .6rem; }
   </style>
@@ -159,6 +160,8 @@ curl https://dv-g3b-aaa-noct-emudhra.we-have-a-problem.com/</pre>
     <tr><td>Homebrew ca-certificates</td><td><a href="https://github.com/Homebrew/homebrew-core/blob/d02b8762f4a29859c47a635a0d2683223fea9812/Formula/c/ca-certificates.rb">2026-09-25_1</a></td></tr>
     <tr><td>OmniOS web/ca-bundle</td><td><a href="https://github.com/omniosorg/omnios-build/blob/r151058/doc/ReleaseNotes.md#r151058y-2026-10-21">r151054by,<br>r151056ay,<br>r151058y</a></td></tr>
     <tr><td>OpenBSD</td><td><a href="https://cvsweb.openbsd.org/checkout/src/lib/libcrypto/cert.pem?rev=1.37">current</a><br><a href="https://www.openbsd.org/errata80.html">8.0</a><br><a href="https://www.openbsd.org/errata79.html">7.9</a></td></tr>
+    <tr><td>Oracle Linux ca-certificates</td><td><a href="https://linux.oracle.com/cve/CVE-2026-111943.html">2025.2.80_v9.0.304-80.2.0.1.el8_10,<br>2025.2.80_v9.0.305-91.0.1.el9,<br>2025.2.80_v9.0.305-102.0.1.el10_2</a></td></tr>
+    <tr><td>RHEL ca-certificates</td><td><a href="https://bugzilla.redhat.com/show_bug.cgi?id=2556046" class="pending">Pending for RHEL 7</a>,<br><a href="https://access.redhat.com/errata/RHSA-2026:88459">2026.2.92_v9.0.319-81.3.el8_10</a>,<br><a href="https://access.redhat.com/errata/RHSA-2026:88459">2026.2.92_v9.0.319-90.3.el9_8</a>,<br><a href="https://access.redhat.com/errata/RHSA-2026:88455">2026.2.92_v9.0.319-100.3.el10_2</a></td></tr>
     <tr><td>Ubuntu ca-certificates</td><td><a href="https://bugs.launchpad.net/ubuntu/+source/ca-certificates/+bug/2171507">20260816ubuntu0.22.04.1,<br>20260816ubuntu0.24.04.1,<br>20260816ubuntu0.26.04.1,<br>20260816ubuntu0.26.10.1</a></td></tr>
     <tr><td>Bottlerocket</td><td><a href="https://github.com/bottlerocket-os/bottlerocket/issues/4976" class="pending">pending</a></td></tr>
   </tbody>
@@ -178,7 +181,7 @@ curl https://dv-g3b-aaa-noct-emudhra.we-have-a-problem.com/</pre>
     <tr><td>Rust rustls-webpki</td><td><a href="https://github.com/rustls/webpki/releases/tag/v%2F0.103.16">0.103.16</a></td></tr>
     <tr><td>Rust webpki-roots / webpki-root-certs</td><td><a href="https://github.com/rustls/webpki-roots/releases/tag/v%2F1.0.10">1.0.10</a></td></tr>
     <tr><td>Composer ca-bundle</td><td><a href="https://github.com/composer/ca-bundle/pull/154" class="pending">pending<br>(1.4.16, 1.6.0)</a></td></tr>
-    <tr><td>Erlang certifi</td><td><a href="https://github.com/certifi/erlang-certifi/pull/56" class="pending">pending</a></td></tr>
+    <tr><td>Erlang certifi</td><td><a href="https://certifi.hexdocs.pm/2.18.0/changelog.html#2-18-0-2026-10-23">2.18.0</a></td></tr>
   </tbody>
 </table>
 
@@ -191,7 +194,7 @@ curl https://dv-g3b-aaa-noct-emudhra.we-have-a-problem.com/</pre>
     <tr><td>Deno</td><td><a href="https://github.com/denoland/deno/releases/tag/v2.9.8">2.9.8</a></td></tr>
     <tr><td>Electron</td><td><a href="https://github.com/electron/electron/releases/tag/v44.9.1">44.9.1,<br>43.8.1,<br>42.11.16</a></td></tr>
     <tr><td>Go</td><td><a href="https://groups.google.com/g/golang-announce/c/66pojueaQek">1.27.3,<br>1.26.10</a></td></tr>
-    <tr><td>Java</td><td>27.0.1.0.2,<br>25.0.5.0.2,<br>21.0.13.0.2,<br>17.0.21.0.2,<br>11.0.33.0.2,<br>8u511<br>(<a href="https://openjdk.org/groups/vulnerability/advisories/2026-10-21">OpenJDK</a>, <a href="https://ops.java/emudhra">Oracle JDK</a>)</td></tr>
+    <tr><td>Java</td><td>27.0.1.0.2,<br>25.0.5.0.2,<br>21.0.13.0.2,<br>17.0.21.0.2,<br>11.0.33.0.2,<br><a href="https://www.oracle.com/java/technologies/javase/8u511-b32-relnotes.html">8u511 b32</a><br>(<a href="https://openjdk.org/groups/vulnerability/advisories/2026-10-21">OpenJDK</a>, <a href="https://ops.java/emudhra">Oracle JDK</a>)</td></tr>
     <tr><td>Node.js</td><td><a href="https://github.com/nodejs/node/releases/tag/v26.12.1">26.12.1</a>,<br><a href="https://github.com/nodejs/node/releases/tag/v24.22.1">24.22.1</a>,<br><a href="https://github.com/nodejs/node/releases/tag/v22.23.4">22.23.4</a></td></tr>
     <tr><td>Python</td><td><a href="https://blog.python.org/2026/10/python-3151-3149-31317/">3.15.1,<br>3.14.9,<br>3.13.17</a></td></tr>
   </tbody>
@@ -202,18 +205,20 @@ curl https://dv-g3b-aaa-noct-emudhra.we-have-a-problem.com/</pre>
 <table class="patched">
   <thead><tr><th>Software</th><th>Patched version</th></tr></thead>
   <tbody>
-    <tr><td>ArgoCD</td><td><a href="https://github.com/argoproj/argo-cd/releases/tag/v3.3.18">3.3.18</a></td></tr>
+    <tr><td>ArgoCD</td><td><a href="https://github.com/argoproj/argo-cd/releases/tag/v3.3.18">3.3.18</a>, <a href="https://github.com/argoproj/argo-cd/releases/tag/v3.4.12">3.4.12</a>, <a href="https://github.com/argoproj/argo-cd/releases/tag/v3.5.6">3.5.6</a>, <a href="https://github.com/argoproj/argo-cd/releases/tag/v3.6.0-rc4">3.6.0-rc4</a></td></tr>
     <tr><td>Claude Code</td><td><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#21303">2.1.303</a></td></tr>
+    <tr><td>Conda</td><td><a href="https://docs.conda.io/projects/conda/en/latest/release-notes.html#version-26.9.4">26.9.4</a></td></tr>
     <tr><td>Docker Desktop</td><td><a href="https://docs.docker.com/desktop/release-notes/#4962">4.96.2</a></td></tr>
+    <tr><td>Git for Windows</td><td><a href="https://github.com/git-for-windows/git/releases/tag/v2.56.0.windows.3">2.56.0.3</a></td></tr>
     <tr><td>mise</td><td><a href="https://github.com/jdx/mise/releases/tag/v2026.10.17">2026.10.17</a></td></tr>
+    <tr><td>Obsidian</td><td><a href="https://obsidian.md/changelog/2026-10-22-desktop-v1.14.5/">1.14.5</a></td></tr>
     <tr><td>pip</td><td><a href="https://github.com/pypa/pip/releases/tag/26.2.2">26.2.2</a></td></tr>
     <tr><td>pixi</td><td><a href="https://github.com/prefix-dev/pixi/releases/tag/v0.82.1">0.82.1</a></td></tr>
     <tr><td>pypi-publish GitHub Action</td><td><a href="https://github.com/pypa/gh-action-pypi-publish/releases/tag/v1.14.3">1.14.3</a></td></tr>
     <tr><td>Rustup</td><td><a href="https://blog.rust-lang.org/2026/10/20/Rustup-1.29.2/">1.29.2</a></td></tr>
-    <tr><td>uv</td><td><a href="https://github.com/astral-sh/uv/releases/tag/0.13.4">0.13.4</a></td></tr>
-    <tr><td>Conda</td><td><a href="https://docs.conda.io/projects/conda/en/latest/release-notes.html#version-26.9.4">26.9.4</a></td></tr>
-    <tr><td>Godot</td><td><a href="https://github.com/godotengine/godot/pull/124724" class="pending">pending</a></td></tr>
+    <tr><td>uv</td><td><a href="https://github.com/astral-sh/uv/releases/tag/0.13.5">0.13.5</a></td></tr>
     <tr><td>Visual Studio Code</td><td><a href="https://code.visualstudio.com/updates/v1_143">1.143.1</a></td></tr>
+    <tr><td>Godot</td><td><a href="https://github.com/godotengine/godot/pull/124724" class="pending">pending</a></td></tr>
   </tbody>
 </table>
 
@@ -299,13 +304,28 @@ update-ca-trust</pre>
 
 <p><strong>This mitigation is not recommended for enterprise-managed devices.</strong> Your IT department will manage the rollout; contact them before applying local changes.</p>
 
-<p>Download and inspect <a href="Block-EmudhraCompromisedCA.ps1"><code>Block-EmudhraCompromisedCA.ps1</code></a>, then run it from an elevated PowerShell terminal. Requires PowerShell 5.1 or later and the built-in Windows PKI module. This command bypasses execution policy for this process only; it does not change the machine's policy. Organization-enforced policies may still prevent execution.</p>
+<p>Download and inspect <code>Block-EmudhraCompromisedCA.ps1</code> from the <span class="hint" title="We intentionally don't link the script directly here. Direct download links can trigger false-positive &quot;suspicious link&quot; warnings in Microsoft Teams and similar tools.">GitHub repository linked in the footer</span>, then run it from an elevated PowerShell terminal. Requires PowerShell 5.1 or later and the built-in Windows PKI module. This command bypasses execution policy for this process only; it does not change the machine's policy. Organization-enforced policies may still prevent execution.</p>
 
 <pre>powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Block-EmudhraCompromisedCA.ps1</pre>
 
 <p>The script imports its 16 compromised intermediates and cross-signs into <code>LocalMachine\Disallowed</code> (Untrusted Certificates).</p>
 
 <p>This mitigation applies to clients using the Windows operating system certificate trust stores and chain validation (including Schannel TLS and Authenticode). It adds blocks to Untrusted Certificates without modifying Trusted Root Certification Authorities. Applications using independent CA bundles still need their own updates.</p>
+</details>
+
+<details class="workaround" id="android">
+<summary><h4>Android</h4></summary>
+
+<p>Many Android devices have automatically received an update blocking the affected certificates via the Google Play services update channel.</p>
+
+<p>On devices that have not received the updated blocklist, users may be able to disable the affected roots in the system trust store. Open Settings and search for <strong>Trusted credentials</strong>, which is often found under Security, then Encryption &amp; credentials. In the <strong>System</strong> tab, tap each of the following certificates and choose <strong>Disable</strong>:</p>
+<ul>
+<li><strong>emSign ECC Root CA - G3</strong>, listed under eMudhra Technologies Limited</li>
+<li><strong>AAA Certificate Services</strong>, listed under Comodo CA Limited</li>
+</ul>
+<p>The other eMudhra and Comodo certificates in the list are not affected and should be left enabled. Disabling AAA Certificate Services may cause errors on some websites that still chain to it. The roots can be re-enabled from the same screen once the device has received an update.</p>
+
+<p>Some Android devices (e.g. Huawei's HarmonyOS) may not allow users to disable system-installed roots.</p>
 </details>
 
 <details class="workaround" id="netbsd">
