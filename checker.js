@@ -28,10 +28,11 @@ const HOSTS = [
   { host: 'dv-g3b-noct-emudhra.we-have-a-problem.com',     label: 'CN=EM DV TLS CA - G3B, O=eMudhra BV, C=NL', root: 'emSign Root TLS CA - G3', noct: true },
   { host: 'dv-g3b-aaa-noct-emudhra.we-have-a-problem.com', label: 'CN=EM DV TLS CA - G3B, O=eMudhra BV, C=NL', root: 'AAA Certificate Services', noct: true },
 ];
-// Fetched alongside the hosts above but not shown: an ordinary, publicly
-// trusted certificate on the same servers, so every client reaches it. It
-// gives the statistics a count of the clients that ran the check, patched
-// or not, to set the insecure connections against.
+// Fetched alongside the hosts above as a liveness check: an ordinary, publicly
+// trusted certificate on the same servers, so every client should reach it. If
+// it cannot be reached, the results above may reflect a network problem rather
+// than the trust store, and a note says so. It also gives the statistics a
+// count of the clients that ran the check, patched or not.
 const PROBE_HOST = 'probe-emudhra.we-have-a-problem.com';
 const TIMEOUT_MS = 10000;
 const COOLDOWN_MS = 10000;
@@ -52,6 +53,7 @@ const S = Object.assign({
   incomplete: unknown => ` ${unknown} timed out or returned an unexpected response, so the result is incomplete. ` +
     'Please try again later, or from a network without a TLS-intercepting proxy.',
   runAgain: 'Run again',
+  livenessFailed: 'The server liveness check failed, so these results may be invalid.',
 }, window.CHECKER_STRINGS || {});
 
 const resultsBody = document.querySelector('#results tbody');
@@ -111,8 +113,7 @@ async function run() {
     td.textContent = S.checking;
     td.className = 'pending';
   }
-  // The result of the probe is not shown; it only needs to be requested.
-  probe(PROBE_HOST).catch(() => {});
+  const liveness = probe(PROBE_HOST);
   const results = await Promise.all(HOSTS.map(async ({ host }, i) => {
     const r = await probe(host);
     cells[i].textContent = r.text;
@@ -122,6 +123,12 @@ async function run() {
   const n = results.filter(s => s === 'connected').length;
   const unknown = results.filter(s => s === 'unknown').length;
   summary.textContent = S.summary(n, HOSTS.length) + (unknown ? S.incomplete(unknown) : '');
+  if ((await liveness).status !== 'connected') {
+    const note = document.createElement('span');
+    note.className = 'bad';
+    note.textContent = S.livenessFailed;
+    summary.append(' ', note);
+  }
 }
 
 // Disable the button until the run has finished and the cooldown has passed.
