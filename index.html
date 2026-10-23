@@ -5,8 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="The private keys of eight eMudhra intermediate CA certificates, trusted by major root programs, have been compromised. Check whether your client is affected and how to protect it.">
   <title>eMudhra Intermediate CA Compromise</title>
+  <script>
+  // Send browsers whose first preferred language is Japanese to the Japanese
+  // summary, but only when they land on the bare URL: not when the URL names a
+  // section the summary lacks, not when they arrived from a page on this site,
+  // not after they have seen the Japanese page in this tab, and never once they
+  // have chosen English via ?lang=en (the "English" link on ja.html). Choosing
+  // the Japanese link below clears that choice again.
+  (function () {
+    try {
+      var params = new URLSearchParams(location.search);
+      if (params.get('lang') === 'en') {
+        localStorage.setItem('lang', 'en');
+        params.delete('lang');
+        history.replaceState(null, '', location.pathname + (params.toString() ? '?' + params : '') + location.hash);
+        return;
+      }
+      if (location.hash || localStorage.getItem('lang') === 'en' || sessionStorage.getItem('seen-ja')) return;
+      if (document.referrer && new URL(document.referrer).origin === location.origin) return;
+      var first = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+      if (/^ja(-|$)/i.test(first)) location.replace('ja.html');
+    } catch (e) {}
+  })();
+  </script>
   <script src="checker.js" defer></script>
   <link rel="canonical" href="https://emudhra.we-have-a-problem.com/">
+  <link rel="alternate" hreflang="en" href="https://emudhra.we-have-a-problem.com/">
+  <link rel="alternate" hreflang="ja" href="https://emudhra.we-have-a-problem.com/ja.html">
+  <link rel="alternate" hreflang="x-default" href="https://emudhra.we-have-a-problem.com/">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://emudhra.we-have-a-problem.com/">
   <meta property="og:title" content="eMudhra Intermediate CA Compromise">
@@ -53,11 +79,15 @@
     abbr[title] { cursor: help; }
     .hint[title] { cursor: help; text-decoration: underline dotted; }
     small { color: #808080; }
+    .lang { margin: -1rem 0 1rem; text-align: right; }
+    @media (min-width: 30rem) { .lang { margin-top: -3rem; } }
     button { font: inherit; font-size: .9rem; padding: .2rem .6rem; }
   </style>
 </head>
 <body>
 <div class="container">
+
+<p class="lang"><small>English / <a id="lang-ja" href="ja.html" hreflang="ja" lang="ja">日本語（要約）</a></small></p>
 
 <h1>eMudhra Intermediate CA Compromise</h1>
 
@@ -367,6 +397,11 @@ function openLinkedWorkaround() {
 // checker populate its table before we scroll to the linked workaround.
 document.addEventListener('DOMContentLoaded', openLinkedWorkaround);
 window.addEventListener('hashchange', openLinkedWorkaround);
+
+// Picking the Japanese page again forgets an earlier choice of English.
+document.getElementById('lang-ja').addEventListener('click', () => {
+  try { localStorage.removeItem('lang'); } catch (e) {}
+});
 </script>
 </body>
 </html>

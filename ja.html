@@ -5,7 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="主要なルートプログラムで信頼されているeMudhra中間CA証明書の秘密鍵が8件侵害されました。お使いのクライアントが影響を受けるかどうかと，対処方法を確認してください。">
   <title>eMudhra中間CA証明書の秘密鍵の侵害について</title>
+  <link rel="canonical" href="https://emudhra.we-have-a-problem.com/ja.html">
   <link rel="alternate" hreflang="en" href="https://emudhra.we-have-a-problem.com/">
+  <link rel="alternate" hreflang="ja" href="https://emudhra.we-have-a-problem.com/ja.html">
+  <link rel="alternate" hreflang="x-default" href="https://emudhra.we-have-a-problem.com/">
+  <script>
+  // Once this tab has shown the Japanese page, the English page stops redirecting to it.
+  try { sessionStorage.setItem('seen-ja', '1'); } catch (e) {}
+  </script>
   <script>
   // Japanese strings for the shared checker. Any key omitted keeps the English default.
   window.CHECKER_STRINGS = {
@@ -21,10 +28,11 @@
     incomplete: unknown => `${unknown}件は，時間内に応答がないか，テスト用の応答を確認できなかったため，結果は不完全です。` +
       'しばらくしてから，またはTLS通信を中継・検査するプロキシを経由しないネットワークから，もう一度お試しください。',
     runAgain: 'もう一度接続をテストする',
+    livenessFailed: 'サーバーの死活確認に失敗したため，これらの結果は正しくない可能性があります。',
   };
   </script>
-  <!-- The host list lives with the English page, so additions there apply here automatically. -->
-  <script src="https://emudhra.we-have-a-problem.com/checker.js" defer></script>
+  <!-- Shared with the English page, so additions to its host list apply here automatically. -->
+  <script src="checker.js" defer></script>
   <style>
     html { font: 15px/1.7 system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
     @media (min-width: 30rem) { html { font-size: 17px; } }
@@ -43,9 +51,9 @@
     .bad { color: #c00; }
     .pending { color: #999; }
     .note { color: #666; font-size: .9rem; }
-    .draft { border: 3px solid #c00; background: #fff4f4; color: #900; padding: .75rem 1rem; margin: 0 0 1.5rem; font-weight: bold; }
-    .draft p { margin: 0 0 .5rem; }
-    .draft p:last-child { margin: 0; }
+    .translation { border-left: .25rem solid #ccc; background: #f5f5f5; color: #666; padding: .75rem 1rem; margin: 0 0 1.5rem; font-size: .9rem; }
+    .translation p { margin: 0 0 .5rem; }
+    .translation p:last-child { margin: 0; }
     abbr[title] { cursor: help; }
     small { color: #808080; }
     button { font: inherit; font-size: .9rem; padding: .2rem .6rem; }
@@ -54,12 +62,12 @@
 <body>
 <div class="container">
 
-<div class="draft" role="note">
+<div class="translation" role="note">
   <p>この日本語版は，<a href="https://github.com/GrEarl">GrEarl</a>が2026年10月23日時点の英語版を翻訳したものです。最新の情報や詳しい情報は，<a href="https://emudhra.we-have-a-problem.com/" hreflang="en">英語版</a>をご覧ください。</p>
   <p lang="en">This Japanese page was translated by <a href="https://github.com/GrEarl">GrEarl</a> from the English page as of 23rd October 2026. For the latest and more detailed information, see the <a href="https://emudhra.we-have-a-problem.com/">English page</a>.</p>
 </div>
 
-<p class="note"><a href="https://emudhra.we-have-a-problem.com/" hreflang="en">English</a> / 日本語（要約）</p>
+<p class="note"><a href="https://emudhra.we-have-a-problem.com/?lang=en" hreflang="en">English</a> / 日本語（要約）</p>
 
 <h1>eMudhra中間CA証明書の秘密鍵の侵害について</h1>
 
