@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="The private keys of eight eMudhra intermediate CA certificates, trusted by major root programs, have been compromised. Check whether your client is affected and how to protect it.">
   <title>eMudhra Intermediate CA Compromise</title>
+  <script src="checker.js" defer></script>
   <link rel="canonical" href="https://emudhra.we-have-a-problem.com/">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://emudhra.we-have-a-problem.com/">
@@ -353,7 +354,6 @@ certctl rehash
 
 </div>
 
-<script src="checker.js"></script>
 <script>
 // Workarounds are collapsed by default. Open the one a link points at.
 function openLinkedWorkaround() {
@@ -363,7 +363,9 @@ function openLinkedWorkaround() {
     el.scrollIntoView();
   }
 }
-openLinkedWorkaround();
+// Deferred scripts run before DOMContentLoaded, so waiting for it lets the
+// checker populate its table before we scroll to the linked workaround.
+document.addEventListener('DOMContentLoaded', openLinkedWorkaround);
 window.addEventListener('hashchange', openLinkedWorkaround);
 </script>
 </body>

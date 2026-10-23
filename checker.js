@@ -1,9 +1,10 @@
 // Trust checker shared by index.html and translated copies of it.
 //
 // Expects the page to contain a <table id="results"> with a <tbody>, a
-// <button id="rerun"> and an element with id="summary". Include it at the end
-// of <body>. To translate the user-facing text, define window.CHECKER_STRINGS
-// before this script loads; any key left out keeps the English default.
+// <button id="rerun"> and an element with id="summary". Include it with
+// `defer` (from <head>) or at the end of <body>. To translate the user-facing
+// text, define window.CHECKER_STRINGS in an inline script before this one
+// runs; any key left out keeps the English default.
 
 // Hosts under test. Each intermediate is served twice: first chaining to its
 // emSign root, then via the Sectigo cross-sign chaining to AAA Certificate
