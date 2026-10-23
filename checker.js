@@ -48,9 +48,10 @@ const S = Object.assign({
   insecure: '❌ Insecure',
   didNotConnect: '✅ Did not connect',
   timedOut: '⚠️ Inconclusive (timed out)',
+  offline: '⚠️ Inconclusive (browser reports being offline)',
   unexpected: status => `⚠️ Inconclusive (unexpected HTTP ${status} response)`,
   summary: (n, total) => `Your browser trusted ${n} of ${total} compromised certificate chains.`,
-  incomplete: unknown => ` ${unknown} timed out or returned an unexpected response, so the result is incomplete. ` +
+  incomplete: unknown => ` ${unknown} could not be checked, so the result is incomplete. ` +
     'Please try again later, or from a network without a TLS-intercepting proxy.',
   runAgain: 'Run again',
   livenessFailed: 'The server liveness check failed, so these results may be invalid.',
@@ -80,6 +81,8 @@ async function probe(host) {
     }
     return { status: 'connected', text: S.insecure };
   } catch (err) {
+    // A browser that reports being offline never reached the server.
+    if (navigator.onLine === false) return { status: 'unknown', text: S.offline };
     // A slow server is not evidence that the chain was rejected.
     if (err.name === 'AbortError') return { status: 'unknown', text: S.timedOut };
     // Browsers report TLS failures and network errors identically here.
