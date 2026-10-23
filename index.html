@@ -95,6 +95,8 @@
 
 <p>The private keys of eight eMudhra intermediate CA certificates have been compromised. They chain to roots trusted by the Mozilla, Microsoft, Apple and Chrome root programs and by many downstream trust stores.</p>
 
+<p>Root programs are run by operating system and browser vendors to vet certificate authorities and decide which ones their products trust. Trust stores are the lists of trusted root certificates that operating systems, browsers, language runtimes, libraries and applications use to verify certificates, and many are based on the root programs' lists.</p>
+
 <h2 id="proof"><a href="#proof">How do we know?</a></h2>
 
 <p>To demonstrate that the keys are compromised, the original reporter Wayne signed the following message with the private key of each of the eight intermediate CAs and reported it to the Root Program Teams on the 17th of October:</p>
@@ -117,7 +119,7 @@ openssl dgst -sha384 -verify EM-DV-TLS-CA-G3B.pub.pem -signature EM-DV-TLS-CA-G3
 
 <p>This has already been remediated by Mozilla, Microsoft, Apple, and Chrome for their users through their tools for distributing revocation information such as <a href="https://blog.mozilla.org/security/2015/03/03/revoking-intermediate-certificates-introducing-onecrl/">OneCRL</a>, <a href="https://hacks.mozilla.org/2025/08/crlite-fast-private-and-comprehensive-certificate-revocation-checking-in-firefox/">CRLite</a> and <a href="https://www.chromium.org/Home/chromium-security/crlsets/">CRLSets</a>.</p>
 
-<p>The CA has also revoked the compromised intermediate certificates. However, many other clients do not consume revocation information and require software updates to ensure they no longer trust the compromised intermediates.</p>
+<p>The CA has also revoked the compromised intermediate certificates. However, many other clients do not consume revocation information and require software updates to ensure they no longer trust the compromised intermediates. These include applications and libraries that ship their own CA bundle, and apps built on Electron, such as Slack and Discord. Electron apps only pick up Electron's fix once they are updated to a version built on a <a href="#patched-runtimes">patched Electron release</a>. Updating the operating system or browser may not be enough for these clients.</p>
 
 <h2 id="check"><a href="#check">Does your client still trust the compromised intermediates?</a></h2>
 
