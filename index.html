@@ -268,17 +268,37 @@ curl https://dv-g3b-aaa-noct-emudhra.we-have-a-problem.com/</pre>
 <details class="workaround" id="macos-curl">
 <summary><h4>macOS curl, git, and Python</h4></summary>
 
-<p>macOS blocks the compromised intermediates, but the built-in <code translate="no">curl</code>, <code translate="no">git</code>, <code translate="no">python3</code>, <code translate="no">perl</code>, <code translate="no">ruby</code>, and <code translate="no">openssl</code> verify certificates against <code translate="no">/etc/ssl/cert.pem</code> without checking revocation, and that file has not been updated. To remove the affected roots from it, run:</p>
-<pre translate="no">sudo cp -p /etc/ssl/cert.pem /etc/ssl/cert.pem.bak &amp;&amp;
-sudo awk '/^(###|===) /{skip=0}
-  /^=== .*\/CN=(AAA Certificate Services|emSign ECC Root CA - G3)$/{skip=1}
-  !skip' /etc/ssl/cert.pem.bak | sudo tee /etc/ssl/cert.pem &gt; /dev/null</pre>
+<p>macOS blocks the compromised intermediates in apps that use Apple's networking and security frameworks. However, the built-in command line tools verify certificates against <code translate="no">/etc/ssl/cert.pem</code> without checking revocation. Apple has <a href="https://support.apple.com/en-us/149555">stated</a> it will update that file in a future macOS update. Until then, you can remove the affected roots yourself.</p>
+
+<p>Back up the file:</p>
+<pre translate="no">[ -e /etc/ssl/cert.pem.orig ] || sudo cp -p /etc/ssl/cert.pem /etc/ssl/cert.pem.orig</pre>
+
+<p>Remove emSign ECC Root CA - G3. This prints nothing on success:</p>
+<pre translate="no">t=$(mktemp) &amp;&amp;
+awk -v s='=== /C=IN/OU=emSign PKI/O=eMudhra Technologies Limited/CN=emSign ECC Root CA - G3' \
+  '/^(===|###) /{skip=0} $0==s{skip=1} !skip' /etc/ssl/cert.pem &gt; "$t" &amp;&amp;
+[ -s "$t" ] &amp;&amp; sudo install -m 0644 -o root -g wheel "$t" /etc/ssl/cert.pem; rm -f "$t"</pre>
+
+<p>This does not block the six Sectigo cross-signed intermediates, which chain to AAA Certificate Services. To block those too, also remove that root. This may break verification of unaffected websites that chain to AAA Certificate Services:</p>
+<pre translate="no">t=$(mktemp) &amp;&amp;
+awk -v s='=== /C=GB/ST=Greater Manchester/L=Salford/O=Comodo CA Limited/CN=AAA Certificate Services' \
+  '/^(===|###) /{skip=0} $0==s{skip=1} !skip' /etc/ssl/cert.pem &gt; "$t" &amp;&amp;
+[ -s "$t" ] &amp;&amp; sudo install -m 0644 -o root -g wheel "$t" /etc/ssl/cert.pem; rm -f "$t"</pre>
+
+<p>Check the result. This lists either root if it is still in the file, and prints nothing if both were removed. If it shows an error, restore the backup:</p>
+<pre translate="no">openssl crl2pkcs7 -nocrl -certfile /etc/ssl/cert.pem | openssl pkcs7 -print_certs -noout |
+  grep -E 'emSign ECC Root CA - G3|AAA Certificate Services'</pre>
+
+<p>Apple has warned that until it ships its own fix, a macOS update may replace <code translate="no">/etc/ssl/cert.pem</code>. You may need to repeat these steps after each update.</p>
+
 <p>The built-in <code translate="no">pip3</code>, and the <code translate="no">pip</code> in virtual environments created from the built-in <code translate="no">python3</code>, use their own outdated copy of the roots instead. To make them use the fixed system file, run:</p>
 <pre translate="no">F="$(/usr/bin/python3 -c 'import sysconfig; print(sysconfig.get_path("stdlib"))')/sitecustomize.py" &amp;&amp;
 echo 'import os; os.environ.setdefault("PIP_CERT", "/etc/ssl/cert.pem")' | sudo tee -a "$F" &gt; /dev/null &amp;&amp;
 sudo chmod 644 "$F"</pre>
 
 <p>For nix-darwin users, please <strong>additionally</strong> follow NixOS instructions.</p>
+
+<p>See Apple's <a href="https://support.apple.com/en-us/149555">official guidance</a> for more information.</p>
 </details>
 
 <details class="workaround" id="linux">
