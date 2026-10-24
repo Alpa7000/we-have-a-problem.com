@@ -68,11 +68,23 @@ function cell(text, cls) {
   return td;
 }
 
-async function probe(host) {
+// A random token for one run of the check, sent as `r=` with the probe and
+// every test-site request so the statistics server can tell that they came
+// from the same run and count the run once as protected or not. It identifies
+// nothing: it is fresh each run and the server keeps only a salted hash of it.
+function runNonce() {
+  const bytes = new Uint8Array(16);
+  (self.crypto || {}).getRandomValues
+    ? self.crypto.getRandomValues(bytes)
+    : bytes.forEach((_, i) => { bytes[i] = Math.floor(Math.random() * 256); });
+  return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function probe(host, nonce) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const res = await fetch(`https://${host}/?t=${Date.now()}`, { cache: 'no-store', signal: controller.signal });
+    const res = await fetch(`https://${host}/?t=${Date.now()}&r=${nonce}`, { cache: 'no-store', signal: controller.signal });
     // A TLS-intercepting proxy terminates the connection itself, so its
     // responses say nothing about whether this browser trusts the chain.
     const body = await res.text();
@@ -116,9 +128,10 @@ async function run() {
     td.textContent = S.checking;
     td.className = 'pending';
   }
-  const liveness = probe(PROBE_HOST);
+  const nonce = runNonce();
+  const liveness = probe(PROBE_HOST, nonce);
   const results = await Promise.all(HOSTS.map(async ({ host }, i) => {
-    const r = await probe(host);
+    const r = await probe(host, nonce);
     cells[i].textContent = r.text;
     cells[i].className = { connected: 'bad', blocked: 'good', unknown: 'pending' }[r.status];
     return r.status;
