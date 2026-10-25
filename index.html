@@ -389,7 +389,17 @@ update-ca-trust</pre>
 </ul>
 <p>The other eMudhra and Comodo certificates in the list are not affected and should be left enabled. Disabling AAA Certificate Services may cause errors on some websites that still chain to it. The roots can be re-enabled from the same screen once the device has received an update.</p>
 
-<p>Some Android devices (e.g. Huawei's HarmonyOS) may not allow users to disable system-installed roots.</p>
+<p>Some Android devices may not allow users to disable system-installed roots.</p>
+</details>
+
+<details class="workaround" id="openharmony">
+<summary><h4>OpenHarmony</h4></summary>
+
+<p>The latest PR in OpenHarmony's Security Certificate Manager <a href="https://gitcode.com/openharmony/security_certificate_manager/pull/722">removed the affected certificates</a>.</p>
+
+<p>But these changes are not included in latest HarmonyOS 7 updates, and OpenHarmony-based HarmonyOS does not allow users to disable system-installed roots.</p>
+  
+<p>If you are using HarmonyOS 4.3 and earlier, you can disable system-installed roots like other Android-based systems.</p>
 </details>
 
 <details class="workaround" id="netbsd">
